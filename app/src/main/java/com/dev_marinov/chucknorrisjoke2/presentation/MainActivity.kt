@@ -11,13 +11,10 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
-import com.airbnb.lottie.LottieAnimationView
 import com.dev_marinov.chucknorrisjoke2.R
 import com.dev_marinov.chucknorrisjoke2.databinding.ActivityMainBinding
 import com.dev_marinov.chucknorrisjoke2.databinding.WindowsAlertdialogExitBinding
-
-import kotlin.collections.ArrayList
+import com.dev_marinov.chucknorrisjoke2.presentation.jokes.JokesFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         val runnable2 = Runnable{ // задержка 1,5 сек перед переходом во FragmentList
             if(mySavedInstanceState == null) {
 
-            val fragmentList = FragmentList()
+            val fragmentList = JokesFragment()
             val fragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.add(R.id.llFragList, fragmentList)

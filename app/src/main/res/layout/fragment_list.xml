@@ -15,7 +15,7 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@color/white"
-        tools:context=".presentation.FragmentList">
+        tools:context=".presentation.jokes.JokesFragment">
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImg"
