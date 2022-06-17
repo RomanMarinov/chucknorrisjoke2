@@ -49,7 +49,7 @@ class JokesViewModel : ViewModel() {
             val retroInstance = RetroJokeInstance.getRetroJoke().create(RetroJokeApi::class.java)
             val response = retroInstance.getJoke(category)
             if (response.isSuccessful) {
-                _joke.postValue(response.body()!!.value)
+                response.body()?.let { _joke.postValue(it.value) }
             }
         }
 
@@ -58,7 +58,7 @@ class JokesViewModel : ViewModel() {
     private fun getCategories() {
         Log.d("333", "=makeApiCall=")
 
-        // GlobalScope - карутин верхнего уровня и живет столько сколько живет все приложение
+        // GlobalScope - корутина верхнего уровня и живет столько сколько живет все приложение
         // при этом если фрагмент или активность будут уничтожены где мы используем GlobalScope
         // то GlobalScope не будет уничтожен и это может привести к утечке памяти
         // Поэтому карутин должен привязан к жизненому циклу (к опреденному компоненту).
