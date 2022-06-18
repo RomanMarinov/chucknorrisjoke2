@@ -68,7 +68,7 @@ class JokesFragment : Fragment() {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         binding.recyclerView.apply {
-            layoutManager = layoutManager
+            layoutManager = this@JokesFragment.layoutManager
             adapter = adapterListCategory
         }
 
@@ -122,24 +122,10 @@ class JokesFragment : Fragment() {
         // установка textView по центру  и позицию
         // использую viewModelSelectPos и viewModelWidthTextView
 
-//        lifecycleScope.launch(Dispatchers.Main) {
-//            delay(300)
-//            try {
-//                layoutManager?.let {
-//                    it.scrollToPositionWithOffset(
-//                        jokesViewModel.selectedPosition,
-//                        offset
-//                    )
-//                }
-//            } catch (e: java.lang.Exception) {
-//                Log.e("333", "-try catch FragmentList 1-$e")
-//            }
-//        }
-
-        val runnable1 = Runnable {
+        lifecycleScope.launch(Dispatchers.Main) {
             try {
-                requireActivity().runOnUiThread {
-                    layoutManager!!.scrollToPositionWithOffset(
+                layoutManager?.let {
+                    it.scrollToPositionWithOffset(
                         jokesViewModel.selectedPosition,
                         offset
                     )
@@ -148,6 +134,5 @@ class JokesFragment : Fragment() {
                 Log.e("333", "-try catch FragmentList 1-$e")
             }
         }
-        Handler(Looper.getMainLooper()).postDelayed(runnable1, 300)
     }
 }
