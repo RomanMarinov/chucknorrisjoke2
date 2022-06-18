@@ -9,14 +9,17 @@ import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesApi
 import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesInstance
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeApi
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeInstance
+import com.dev_marinov.chucknorrisjoke2.presentation.AdapterListCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class JokesViewModel : ViewModel() {
+class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
 
     var selectedPosition = 6
-    var widthTextViewCategory = 213
+
+    private val _widthTextViewCategory = MutableLiveData<Int>(213)
+    val widthTextViewCategory = _widthTextViewCategory
 
     private val _categories: MutableLiveData<ArrayList<String>> = MutableLiveData()
     val categories: LiveData<ArrayList<String>> = _categories
@@ -31,6 +34,12 @@ class JokesViewModel : ViewModel() {
             if (it.isNotEmpty())
                 getJoke(it[selectedPosition])
         }
+    }
+
+    override fun onItemClick(position: Int, clickCategory: String, widthTextViewCategory: Int) {
+        selectedPosition = position
+        _widthTextViewCategory.value = widthTextViewCategory
+        getJoke(clickCategory)
     }
 
     fun onCategoryClicked(category: String) = getJoke(category)
