@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="listItem" type="String" />
+        <variable name="category" type="String" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:text="@{listItem}"
+                android:text="@{category}"
                 android:textSize="30sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

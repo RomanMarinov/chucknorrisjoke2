@@ -43,6 +43,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/bai_jamjuree_extralight"
             android:gravity="center"
+            android:text="@string/choose"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@id/cardViewJoke"
