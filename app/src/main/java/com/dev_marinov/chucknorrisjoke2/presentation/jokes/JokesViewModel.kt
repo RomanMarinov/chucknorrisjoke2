@@ -1,6 +1,5 @@
 package com.dev_marinov.chucknorrisjoke2.presentation.jokes
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,20 +8,20 @@ import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesApi
 import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesInstance
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeApi
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeInstance
-import com.dev_marinov.chucknorrisjoke2.presentation.AdapterListCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
+class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
 
     var selectedPosition = 6
+    private val DEFAULT_WIDTH = 213
 
-    private val _widthTextViewCategory = MutableLiveData<Int>(213)
+    private val _widthTextViewCategory = MutableLiveData<Int>()
     val widthTextViewCategory = _widthTextViewCategory
 
-    private val _categories: MutableLiveData<ArrayList<String>> = MutableLiveData()
-    val categories: LiveData<ArrayList<String>> = _categories
+    private val _categories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
+    val categories: LiveData<ArrayList<Category>> = _categories
 
     private val _joke: MutableLiveData<String> = MutableLiveData()
     val joke: LiveData<String> = _joke
@@ -36,17 +35,16 @@ class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
         }
     }
 
-    override fun onItemClick(position: Int, clickCategory: String, widthTextViewCategory: Int) {
+    override fun onItemClick(position: Int, clickCategory: Category, widthTextViewCategory: Int) {
         selectedPosition = position
-        _widthTextViewCategory.value = widthTextViewCategory
+        updateCategories()
         getJoke(clickCategory)
+        _widthTextViewCategory.value = widthTextViewCategory
     }
 
-    fun onCategoryClicked(category: String) = getJoke(category)
+    fun onCategoryClicked(category: Category) = getJoke(category)
 
-    private fun getJoke(category: String) {
-        Log.d("333", "=makeApiCall=")
-
+    private fun getJoke(category: Category) {
         // GlobalScope - карутин верхнего уровня и живет столько сколько живет все приложение
         // при этом если фрагмент или активность будут уничтожены где мы используем GlobalScope
         // то GlobalScope не будет уничтожен и это может привести к утечке памяти
@@ -54,19 +52,15 @@ class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
         // lifecycleScope для фрагментов, viewModelScope - для viewModel
 
         viewModelScope.launch(Dispatchers.IO) {
-
             val retroInstance = RetroJokeInstance.getRetroJoke().create(RetroJokeApi::class.java)
-            val response = retroInstance.getJoke(category)
+            val response = retroInstance.getJoke(category.name)
             if (response.isSuccessful) {
                 response.body()?.let { _joke.postValue(it.value) }
             }
         }
-
     }
 
     private fun getCategories() {
-        Log.d("333", "=makeApiCall=")
-
         // GlobalScope - корутина верхнего уровня и живет столько сколько живет все приложение
         // при этом если фрагмент или активность будут уничтожены где мы используем GlobalScope
         // то GlobalScope не будет уничтожен и это может привести к утечке памяти
@@ -78,14 +72,16 @@ class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
                 RetroCategoriesInstance.getRetroCategory().create(RetroCategoriesApi::class.java)
             val response = retroInstance.getCategories()
             if (response.isSuccessful) {
-                val list: ArrayList<String> = ArrayList()
+                val list: ArrayList<Category> = ArrayList()
                 response.body()?.let {
-                    it.forEach { category ->
+                    it.forEachIndexed { index, name ->
+                        val category = Category(name = name, isSelected = index == selectedPosition)
                         list.add(category)
                     }
                     // setValue уместен в основном потоке приложения,
                     // а postValue — если данные приходят из фонового потока.
                     _categories.postValue(list)
+                    _widthTextViewCategory.postValue(DEFAULT_WIDTH)
                 }
             } else {
                 when (response.code()) {
@@ -98,5 +94,16 @@ class JokesViewModel : ViewModel(), AdapterListCategory.OnItemClickListener {
                 }
             }
         }
+    }
+
+    private fun updateCategories() {
+        val newCategories = arrayListOf<Category>()
+        _categories.value?.let {
+            it.forEachIndexed { index, category ->
+                val newCategory = category.copy(isSelected = index == selectedPosition)
+                newCategories.add(newCategory)
+            }
+        }
+        _categories.value = newCategories
     }
 }

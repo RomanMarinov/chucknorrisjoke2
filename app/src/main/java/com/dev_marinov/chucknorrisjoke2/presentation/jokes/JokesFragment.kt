@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.window.layout.WindowMetricsCalculator
 import com.dev_marinov.chucknorrisjoke2.R
 import com.dev_marinov.chucknorrisjoke2.databinding.FragmentListBinding
-import com.dev_marinov.chucknorrisjoke2.presentation.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,10 +39,11 @@ class JokesFragment : Fragment() {
         initViewModel()
         setUpCategoriesRecyclerView()
         setUpJokeTextView()
+        setUpWidthTextViewCategory()
     }
 
     private fun initInterFace(inflater: LayoutInflater, container: ViewGroup?): View {
-        container?.let { it.removeAllViewsInLayout() }
+        container?.removeAllViewsInLayout()
 
         val orientation = requireActivity().resources.configuration.orientation
         val layoutResId = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -61,17 +61,7 @@ class JokesFragment : Fragment() {
     }
 
     private fun setUpCategoriesRecyclerView() {
-        val onClickListener = object : AdapterListCategory.OnItemClickListener {
-            override fun onItemClick(
-                position: Int,
-                clickCategory: String,
-                widthTextViewCategory: Int
-            ) {
-                calculateWindowsMetrics(widthTextViewCategory)
-            }
-        }
-
-        val adapter = AdapterListCategory(jokesViewModel, jokesViewModel)
+        val adapter = CategoryAdapter(jokesViewModel)
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         binding.recyclerView.apply {
@@ -81,23 +71,18 @@ class JokesFragment : Fragment() {
 
         jokesViewModel.categories.observe(viewLifecycleOwner) { categories ->
             adapter.refreshCategories(categories)
-            adapter!!.notifyDataSetChanged()
-
             jokesViewModel.onCategoryClicked(categories[jokesViewModel.selectedPosition])
-
-            calculateWindowsMetrics(jokesViewModel.widthTextViewCategory.value)
         }
     }
 
     private fun setUpJokeTextView() {
         jokesViewModel.joke.observe(viewLifecycleOwner) {
             binding.tvJoke.text = it
-            calculateWindowsMetrics(jokesViewModel.widthTextViewCategory.value)
         }
     }
 
-    private fun setUpWidthTextViewCategory(){
-        jokesViewModel.widthTextViewCategory.observe(viewLifecycleOwner){
+    private fun setUpWidthTextViewCategory() {
+        jokesViewModel.widthTextViewCategory.observe(viewLifecycleOwner) {
             calculateWindowsMetrics(it)
         }
     }
@@ -121,12 +106,10 @@ class JokesFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             try {
-                layoutManager?.let {
-                    it.scrollToPositionWithOffset(
-                        jokesViewModel.selectedPosition,
-                        offset
-                    )
-                }
+                layoutManager?.scrollToPositionWithOffset(
+                    jokesViewModel.selectedPosition,
+                    offset
+                )
             } catch (e: java.lang.Exception) {
                 Log.e("333", "-try catch FragmentList 1-$e")
             }
