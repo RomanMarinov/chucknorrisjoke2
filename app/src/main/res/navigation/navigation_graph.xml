@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.dev_marinov.chucknorrisjoke2.presentation.splash.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_jokesFragment"
+            app:destination="@id/jokesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/jokesFragment"
+        android:name="com.dev_marinov.chucknorrisjoke2.presentation.jokes.JokesFragment"
+        android:label="JokesFragment"
+        tools:layout="@layout/fragment_list" />
+
+</navigation>
