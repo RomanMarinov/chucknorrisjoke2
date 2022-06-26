@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         supportActionBar?.hide() // скрыть экшен бар
-        setWindow() // установки окна
 
         // при создании макета проверяем статус был ли перед созданием макета открыт диалог
         // если да (true), значит запустим его снова
@@ -58,17 +57,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Handler(Looper.getMainLooper()).postDelayed(runnable2, 1500)
-    }
-
-    private fun setWindow() {
-        val window = window
-        // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS Флаг, указывающий, что это Окно отвечает за отрисовку фона для системных полос.
-        // Если установлено, системные панели отображаются с прозрачным фоном, а соответствующие области в этом окне заполняются
-        // цветами, указанными в Window#getStatusBarColor()и Window#getNavigationBarColor().
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-
-        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent); // прозрачный статус бар
-        window.navigationBarColor  = ContextCompat.getColor(this, android.R.color.black); // черный бар навигации
     }
 
     override fun onBackPressed() {
