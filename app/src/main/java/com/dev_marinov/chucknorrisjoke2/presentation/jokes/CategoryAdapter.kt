@@ -44,13 +44,8 @@ class CategoryAdapter(
         fun bind(category: Category) {
             binding.category = category
 
-            val textColorResId = if (category.isSelected)
-                ContextCompat.getColor(binding.root.context, R.color.orange)
-            else Color.GRAY
-
-            val backGroundResId = if (category.isSelected)
-                R.drawable.button_turn_off
-            else Color.TRANSPARENT
+            val textColorResId = getTextColorResId(category.isSelected)
+            val backGroundResId = getBackgroundResId(category.isSelected)
 
             binding.tvCategory.setTextColor(textColorResId)
             binding.cardView.setBackgroundResource(backGroundResId)
@@ -66,6 +61,18 @@ class CategoryAdapter(
             // Метод executePendingBindings используется, чтобы биндинг не откладывался,
             // а выполнился как можно быстрее. Это критично в случае с RecyclerView.
             binding.executePendingBindings()
+        }
+
+        private fun getTextColorResId(isSelected: Boolean): Int {
+            return if (isSelected)
+                ContextCompat.getColor(binding.root.context, R.color.orange)
+            else Color.GRAY
+        }
+
+        private fun getBackgroundResId(isSelected: Boolean): Int {
+            return if (isSelected)
+                R.drawable.button_turn_off
+            else Color.TRANSPARENT
         }
     }
 }

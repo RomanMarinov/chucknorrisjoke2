@@ -88,7 +88,7 @@ class JokesFragment : Fragment() {
     }
 
     // метод получения размеров view чтобы переместить на центр экрана
-    fun calculateWindowsMetrics(widthTextViewCategory: Int) {
+    private fun calculateWindowsMetrics(widthTextViewCategory: Int) {
         // получить офсет ширина экрана (можно тут получить) / 2 мнус длина текстВью / 2
         val windowMetrics =
             WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(requireActivity())
