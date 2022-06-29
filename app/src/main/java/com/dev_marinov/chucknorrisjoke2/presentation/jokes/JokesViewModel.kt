@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesApi
-import com.dev_marinov.chucknorrisjoke2.model.categories.RetroCategoriesInstance
+import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeApi
 import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeInstance
 import kotlinx.coroutines.Dispatchers
@@ -68,31 +67,13 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
         // lifecycleScope для фрагментов, viewModelScope - для viewModel
 
         viewModelScope.launch(Dispatchers.IO) {
-            val retroInstance =
-                RetroCategoriesInstance.getRetroCategory().create(RetroCategoriesApi::class.java)
-            val response = retroInstance.getCategories()
-            if (response.isSuccessful) {
-                val list: ArrayList<Category> = ArrayList()
-                response.body()?.let {
-                    it.forEachIndexed { index, name ->
-                        val category = Category(name = name, isSelected = index == selectedPosition)
-                        list.add(category)
-                    }
-                    // setValue уместен в основном потоке приложения,
-                    // а postValue — если данные приходят из фонового потока.
-                    _categories.postValue(list)
-                    _widthTextViewCategory.postValue(DEFAULT_WIDTH)
-                }
-            } else {
-                when (response.code()) {
-                    404 -> {
-                        // страница не найдена. можно использовать ResponseBody, см. ниже
-                    }
-                    500 -> {
-                        // ошибка на сервере. можно использовать ResponseBody, см. ниже
-                    }
-                }
+            val list: ArrayList<Category> = ArrayList()
+            CategoryRepository.getCategories().forEachIndexed { index, name ->
+                val category = Category(name = name, isSelected = index == selectedPosition)
+                list.add(category)
             }
+            _categories.postValue(list)
+            _widthTextViewCategory.postValue(DEFAULT_WIDTH)
         }
     }
 
