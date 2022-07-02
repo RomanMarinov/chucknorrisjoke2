@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
-import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeApi
-import com.dev_marinov.chucknorrisjoke2.model.joke.RetroJokeInstance
+import com.dev_marinov.chucknorrisjoke2.data.joke.JokeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -44,27 +43,14 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
     fun onCategoryClicked(category: Category) = getJoke(category)
 
     private fun getJoke(category: Category) {
-        // GlobalScope - карутин верхнего уровня и живет столько сколько живет все приложение
-        // при этом если фрагмент или активность будут уничтожены где мы используем GlobalScope
-        // то GlobalScope не будет уничтожен и это может привести к утечке памяти
-        // Поэтому карутин должен привязан к жизненому циклу (к опреденному компоненту).
-        // lifecycleScope для фрагментов, viewModelScope - для viewModel
-
         viewModelScope.launch(Dispatchers.IO) {
-            val retroInstance = RetroJokeInstance.getRetroJoke().create(RetroJokeApi::class.java)
-            val response = retroInstance.getJoke(category.name)
-            if (response.isSuccessful) {
-                response.body()?.let { _joke.postValue(it.value) }
+            JokeRepository.getJoke(category).let {
+                _joke.postValue(it)
             }
         }
     }
 
     private fun getCategories() {
-        // GlobalScope - корутина верхнего уровня и живет столько сколько живет все приложение
-        // при этом если фрагмент или активность будут уничтожены где мы используем GlobalScope
-        // то GlobalScope не будет уничтожен и это может привести к утечке памяти
-        // Поэтому карутин должен привязан к жизненому циклу (к опреденному компоненту).
-        // lifecycleScope для фрагментов, viewModelScope - для viewModel
 
         viewModelScope.launch(Dispatchers.IO) {
             val list: ArrayList<Category> = ArrayList()
