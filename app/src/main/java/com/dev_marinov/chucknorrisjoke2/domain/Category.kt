@@ -1,6 +1,3 @@
 package com.dev_marinov.chucknorrisjoke2.domain
 
-data class Category(
-    val name: String,
-    val isSelected: Boolean
-)
+data class Category(val name: String)

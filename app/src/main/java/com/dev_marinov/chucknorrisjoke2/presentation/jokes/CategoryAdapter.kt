@@ -7,16 +7,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dev_marinov.chucknorrisjoke2.R
 import com.dev_marinov.chucknorrisjoke2.databinding.ItemCategoryBinding
-import com.dev_marinov.chucknorrisjoke2.domain.Category
+import com.dev_marinov.chucknorrisjoke2.presentation.model.SelectableCategory
 
 class CategoryAdapter(
     private val clickListener: OnItemClickListener
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
-    private var categories: ArrayList<Category> = ArrayList()
+    private var categories: ArrayList<SelectableCategory> = ArrayList()
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int, clickCategory: Category, widthTextViewCategory: Int)
+        fun onItemClick(position: Int, clickCategory: SelectableCategory, widthTextViewCategory: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +32,7 @@ class CategoryAdapter(
 
     override fun getItemCount() = categories.size
 
-    fun refreshCategories(categories: ArrayList<Category>) {
+    fun refreshCategories(categories: ArrayList<SelectableCategory>) {
         this.categories = categories
         notifyDataSetChanged()
     }
@@ -42,7 +42,7 @@ class CategoryAdapter(
         private val listener: OnItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: Category) {
+        fun bind(category: SelectableCategory) {
             binding.category = category
 
             val textColorResId = getTextColorResId(category.isSelected)

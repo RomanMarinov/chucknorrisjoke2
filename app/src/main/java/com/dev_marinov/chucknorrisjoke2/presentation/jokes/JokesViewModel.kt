@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
 import com.dev_marinov.chucknorrisjoke2.data.joke.JokeRepository
 import com.dev_marinov.chucknorrisjoke2.domain.Category
+import com.dev_marinov.chucknorrisjoke2.presentation.model.SelectableCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,8 +20,8 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
     private val _widthTextViewCategory = MutableLiveData<Int>()
     val widthTextViewCategory = _widthTextViewCategory
 
-    private val _categories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
-    val categories: LiveData<ArrayList<Category>> = _categories
+    private val _categories: MutableLiveData<ArrayList<SelectableCategory>> = MutableLiveData()
+    val categories: LiveData<ArrayList<SelectableCategory>> = _categories
 
     private val _joke: MutableLiveData<String> = MutableLiveData()
     val joke: LiveData<String> = _joke
@@ -29,19 +30,25 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
         getCategories()
 
         categories.value?.let {
-            if (it.isNotEmpty())
-                getJoke(it[selectedPosition])
+            if (it.isNotEmpty()) {
+                val selectableCategory: SelectableCategory = it[selectedPosition]
+                getJoke(selectableCategory.mapToDomain())
+            }
         }
     }
 
-    override fun onItemClick(position: Int, clickCategory: Category, widthTextViewCategory: Int) {
+    override fun onItemClick(
+        position: Int,
+        clickCategory: SelectableCategory,
+        widthTextViewCategory: Int
+    ) {
         selectedPosition = position
         updateCategories()
-        getJoke(clickCategory)
+        getJoke(clickCategory.mapToDomain())
         _widthTextViewCategory.value = widthTextViewCategory
     }
 
-    fun onCategoryClicked(category: Category) = getJoke(category)
+    fun onCategoryClicked(category: SelectableCategory) = getJoke(category.mapToDomain())
 
     private fun getJoke(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,9 +61,10 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
     private fun getCategories() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val list: ArrayList<Category> = ArrayList()
+            val list: ArrayList<SelectableCategory> = ArrayList()
             CategoryRepository.getCategories().forEachIndexed { index, name ->
-                val category = Category(name = name, isSelected = index == selectedPosition)
+                val category =
+                    SelectableCategory(name = name, isSelected = index == selectedPosition)
                 list.add(category)
             }
             _categories.postValue(list)
@@ -65,7 +73,7 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
     }
 
     private fun updateCategories() {
-        val newCategories = arrayListOf<Category>()
+        val newCategories = arrayListOf<SelectableCategory>()
         _categories.value?.let {
             it.forEachIndexed { index, category ->
                 val newCategory = category.copy(isSelected = index == selectedPosition)
