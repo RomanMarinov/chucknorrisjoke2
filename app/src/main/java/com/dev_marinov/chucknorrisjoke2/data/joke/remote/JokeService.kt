@@ -1,6 +1,6 @@
 package com.dev_marinov.chucknorrisjoke2.data.joke.remote
 
-import com.dev_marinov.chucknorrisjoke2.data.Joke
+import com.dev_marinov.chucknorrisjoke2.domain.Joke
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

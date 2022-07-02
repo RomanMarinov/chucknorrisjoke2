@@ -6,7 +6,7 @@
     <data>
         <variable
             name="itemFragList"
-            type="com.dev_marinov.chucknorrisjoke2.data.Joke" />
+            type="com.dev_marinov.chucknorrisjoke2.domain.Joke" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

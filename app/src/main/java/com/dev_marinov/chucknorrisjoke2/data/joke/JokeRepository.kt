@@ -2,7 +2,7 @@ package com.dev_marinov.chucknorrisjoke2.data.joke
 
 import com.dev_marinov.chucknorrisjoke2.data.joke.remote.JokeService
 import com.dev_marinov.chucknorrisjoke2.data.joke.remote.RetrofitJokeInstance
-import com.dev_marinov.chucknorrisjoke2.presentation.jokes.Category
+import com.dev_marinov.chucknorrisjoke2.domain.Category
 
 object JokeRepository {
     private val jokeDataSource: JokeService =

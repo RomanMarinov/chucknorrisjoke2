@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dev_marinov.chucknorrisjoke2.R
 import com.dev_marinov.chucknorrisjoke2.databinding.ItemCategoryBinding
+import com.dev_marinov.chucknorrisjoke2.domain.Category
 
 class CategoryAdapter(
     private val clickListener: OnItemClickListener

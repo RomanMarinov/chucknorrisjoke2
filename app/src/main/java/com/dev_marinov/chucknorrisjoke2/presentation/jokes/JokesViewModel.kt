@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
 import com.dev_marinov.chucknorrisjoke2.data.joke.JokeRepository
+import com.dev_marinov.chucknorrisjoke2.domain.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

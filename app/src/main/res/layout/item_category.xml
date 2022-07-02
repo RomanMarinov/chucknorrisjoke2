@@ -6,7 +6,7 @@
 
         <variable
             name="category"
-            type="com.dev_marinov.chucknorrisjoke2.presentation.jokes.Category" />
+            type="com.dev_marinov.chucknorrisjoke2.domain.Category" />
     </data>
 
     <androidx.cardview.widget.CardView
