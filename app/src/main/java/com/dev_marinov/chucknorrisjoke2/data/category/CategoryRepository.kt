@@ -1,11 +1,11 @@
 package com.dev_marinov.chucknorrisjoke2.data.category
 
 import com.dev_marinov.chucknorrisjoke2.data.category.remote.CategoryService
-import com.dev_marinov.chucknorrisjoke2.data.category.remote.RetrofitCategoriesInstance
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object CategoryRepository {
-    private val remoteDataSource: CategoryService =
-        RetrofitCategoriesInstance.getRetrofit().create(CategoryService::class.java)
+@Singleton
+class CategoryRepository @Inject constructor(private val remoteDataSource: CategoryService) {
 
     suspend fun getCategories(): List<String> {
         val response = remoteDataSource.getCategories()

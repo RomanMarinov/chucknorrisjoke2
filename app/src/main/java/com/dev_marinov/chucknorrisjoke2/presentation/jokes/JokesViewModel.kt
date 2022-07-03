@@ -5,14 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
+import com.dev_marinov.chucknorrisjoke2.data.category.remote.CategoryService
+import com.dev_marinov.chucknorrisjoke2.data.category.remote.RetrofitCategoriesInstance
 import com.dev_marinov.chucknorrisjoke2.data.joke.JokeRepository
 import com.dev_marinov.chucknorrisjoke2.domain.Category
 import com.dev_marinov.chucknorrisjoke2.presentation.model.SelectableCategory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
+@HiltViewModel
+class JokesViewModel @Inject constructor(
+    private val categoryRepository: CategoryRepository
+) : ViewModel(), CategoryAdapter.OnItemClickListener {
 
     var selectedPosition = 6
     private val DEFAULT_WIDTH = 213
@@ -59,10 +65,9 @@ class JokesViewModel : ViewModel(), CategoryAdapter.OnItemClickListener {
     }
 
     private fun getCategories() {
-
         viewModelScope.launch(Dispatchers.IO) {
             val list: ArrayList<SelectableCategory> = ArrayList()
-            CategoryRepository.getCategories().forEachIndexed { index, name ->
+            categoryRepository.getCategories().forEachIndexed { index, name ->
                 val category =
                     SelectableCategory(name = name, isSelected = index == selectedPosition)
                 list.add(category)

@@ -8,21 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.window.layout.WindowMetricsCalculator
 import com.dev_marinov.chucknorrisjoke2.R
 import com.dev_marinov.chucknorrisjoke2.databinding.FragmentListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class JokesFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
 
-    private lateinit var jokesViewModel: JokesViewModel
+    private val jokesViewModel: JokesViewModel by viewModels<JokesViewModel>()
 
     private var layoutManager: LinearLayoutManager? = null
 
@@ -36,7 +38,6 @@ class JokesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
         setUpCategoriesRecyclerView()
         setUpJokeTextView()
         setUpWidthTextViewCategory()
@@ -54,10 +55,6 @@ class JokesFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
         return binding.root
-    }
-
-    private fun initViewModel() {
-        jokesViewModel = ViewModelProvider(this)[JokesViewModel::class.java]
     }
 
     private fun setUpCategoriesRecyclerView() {
