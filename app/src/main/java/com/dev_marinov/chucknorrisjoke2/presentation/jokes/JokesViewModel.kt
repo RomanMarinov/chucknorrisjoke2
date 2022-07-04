@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.chucknorrisjoke2.data.category.CategoryRepository
-import com.dev_marinov.chucknorrisjoke2.data.category.remote.CategoryService
-import com.dev_marinov.chucknorrisjoke2.data.category.remote.RetrofitCategoriesInstance
 import com.dev_marinov.chucknorrisjoke2.data.joke.JokeRepository
 import com.dev_marinov.chucknorrisjoke2.domain.Category
 import com.dev_marinov.chucknorrisjoke2.presentation.model.SelectableCategory
@@ -17,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JokesViewModel @Inject constructor(
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val jokeRepository: JokeRepository
 ) : ViewModel(), CategoryAdapter.OnItemClickListener {
 
     var selectedPosition = 6
@@ -58,7 +57,7 @@ class JokesViewModel @Inject constructor(
 
     private fun getJoke(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
-            JokeRepository.getJoke(category).let {
+            jokeRepository.getJoke(category).let {
                 _joke.postValue(it)
             }
         }

@@ -1,7 +1,7 @@
 package com.dev_marinov.chucknorrisjoke2.di
 
 import com.dev_marinov.chucknorrisjoke2.data.category.remote.CategoryService
-import com.dev_marinov.chucknorrisjoke2.data.category.remote.RetrofitCategoriesInstance
+import com.dev_marinov.chucknorrisjoke2.data.joke.remote.JokeService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +18,12 @@ class NetworkModule {
     @Singleton
     fun provideCategoryService(retrofit: Retrofit): CategoryService {
         return retrofit.create(CategoryService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideJokeService(retrofit: Retrofit): JokeService {
+        return retrofit.create(JokeService::class.java)
     }
 
     @Provides

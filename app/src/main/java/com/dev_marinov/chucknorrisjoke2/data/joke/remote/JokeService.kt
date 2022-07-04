@@ -5,9 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-// интерфейс апи для получения шутки
-// корутин suspend для работы с асинхронноым запросом
-// запрос с параметром
 interface JokeService {
 
     @GET("random")
