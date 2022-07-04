@@ -10,20 +10,15 @@ import com.dev_marinov.chucknorrisjoke2.databinding.ItemCategoryBinding
 import com.dev_marinov.chucknorrisjoke2.presentation.model.SelectableCategory
 
 class CategoryAdapter(
-    private val clickListener: OnItemClickListener
+    private val onItemClick: (position: Int, category: SelectableCategory, width: Int) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     private var categories: ArrayList<SelectableCategory> = ArrayList()
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int, clickCategory: SelectableCategory, widthTextViewCategory: Int)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
         val listItemBinding = ItemCategoryBinding.inflate(inflater, parent, false)
-        return ViewHolder(listItemBinding, clickListener)
+        return ViewHolder(listItemBinding, onItemClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,7 +34,7 @@ class CategoryAdapter(
 
     inner class ViewHolder(
         private val binding: ItemCategoryBinding,
-        private val listener: OnItemClickListener
+        private val onItemClick: (position: Int, clickCategory: SelectableCategory, widthTextViewCategory: Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: SelectableCategory) {
@@ -51,7 +46,7 @@ class CategoryAdapter(
             binding.tvCategory.setTextColor(textColorResId)
             binding.cardView.setBackgroundResource(backGroundResId)
             binding.cardView.setOnClickListener {
-                listener.onItemClick(
+                onItemClick(
                     bindingAdapterPosition,
                     category,
                     binding.tvCategory.width

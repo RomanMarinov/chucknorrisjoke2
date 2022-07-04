@@ -17,7 +17,7 @@ import javax.inject.Inject
 class JokesViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val jokeRepository: JokeRepository
-) : ViewModel(), CategoryAdapter.OnItemClickListener {
+) : ViewModel() {
 
     var selectedPosition = 6
     private val DEFAULT_WIDTH = 213
@@ -42,7 +42,7 @@ class JokesViewModel @Inject constructor(
         }
     }
 
-    override fun onItemClick(
+    fun onCategoryClick(
         position: Int,
         clickCategory: SelectableCategory,
         widthTextViewCategory: Int

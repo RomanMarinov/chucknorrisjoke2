@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.window.layout.WindowMetricsCalculator
@@ -58,7 +57,7 @@ class JokesFragment : Fragment() {
     }
 
     private fun setUpCategoriesRecyclerView() {
-        val adapter = CategoryAdapter(jokesViewModel)
+        val adapter = CategoryAdapter(jokesViewModel::onCategoryClick)
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         binding.recyclerView.apply {
