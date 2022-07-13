@@ -57,7 +57,7 @@ class JokesFragment : Fragment() {
     }
 
     private fun setUpCategoriesRecyclerView() {
-        val adapter = CategoryAdapter(jokesViewModel::onCategoryClick)
+        val adapter = CategoryListAdapter(jokesViewModel::onCategoryClick)
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         binding.recyclerView.apply {
@@ -66,7 +66,7 @@ class JokesFragment : Fragment() {
         }
 
         jokesViewModel.categories.observe(viewLifecycleOwner) { categories ->
-            adapter.refreshCategories(categories)
+            adapter.submitList(categories)
             jokesViewModel.onCategoryClicked(categories[jokesViewModel.selectedPosition])
         }
     }
